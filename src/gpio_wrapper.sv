@@ -21,9 +21,13 @@ module gpio_wrapper (rstb, clk, ena, gpio_start, gpio_stop, gpio_start_cmd, gpio
   logic gpio_start_sync;
   logic gpio_stop_sync;
 
+  // Number of stages in each synchronizer
+  localparam int SYNC_STAGES = 2;
+  localparam int SYNC_WIDTH = 1;
+
   // Synchronizers
-  synchronizer sync_gpio_start (.rstb(rstb), .clk(clk), .ena(ena), .data_in(gpio_start), .data_out(gpio_start_sync));
-  synchronizer sync_gpio_stop (.rstb(rstb), .clk(clk), .ena(ena), .data_in(gpio_stop), .data_out(gpio_stop_sync));
+  synchronizer #(.STAGES(SYNC_STAGES), .WIDTH(SYNC_WIDTH)) sync_gpio_start (.rstb(rstb), .clk(clk), .ena(ena), .data_in(gpio_start), .data_out(gpio_start_sync));
+  synchronizer #(.STAGES(SYNC_STAGES), .WIDTH(SYNC_WIDTH)) sync_gpio_stop (.rstb(rstb), .clk(clk), .ena(ena), .data_in(gpio_stop), .data_out(gpio_stop_sync));
 
   // GPIO commands
   rising_edge_detector gpio_start_cmd_i (.rstb(rstb), .clk(clk), .ena(ena), .data(gpio_start_sync), .pos_edge(gpio_start_cmd));

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Your Name
+ * Copyright (c) 2024 Caio Alonso da Costa
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,6 +16,13 @@ module tt_um_calonso88_rsa (
     input  wire       rst_n     // reset_n - low to reset
 );
 
+  // GPIO Auxiliars
+  wire gpio_start;
+  wire gpio_stop;
+  wire gpio_irq;
+  wire gpio_start_cmd;
+  wire gpio_stop_cmd;
+
   // SPI Auxiliars
   wire spi_cs_n;
   wire spi_clk;
@@ -23,13 +30,33 @@ module tt_um_calonso88_rsa (
   wire spi_mosi;
   wire cpol;
   wire cpha;
-    
+  
   // Sync'ed
   wire spi_cs_n_sync;
   wire spi_clk_sync;
   wire spi_mosi_sync;
   wire cpol_sync;
   wire cpha_sync;
+
+  wire spi_start_cmd;
+  wire spi_stop_cmd;
+
+  // RSA En FSM Auxiliars
+  wire ena_rsa;
+  wire clear_rsa;
+  wire eoc_rsa;
+  wire irq;
+
+  // RSA Unit size
+  localparam int REG_WIDTH = 8;
+
+  // RSA Unit P, E, M, Const and C
+  wire [REG_WIDTH-1:0] rsa_p;
+  wire [REG_WIDTH-1:0] rsa_e;
+  wire [REG_WIDTH-1:0] rsa_m;
+  wire [REG_WIDTH-1:0] rsa_const;
+  wire [REG_WIDTH-1:0] rsa_c;
+  wire [REG_WIDTH-1:0] spare;
 
   // Bi direction IOs [6:4] as inputs
   assign uio_oe[6:4] = 3'b000;
@@ -64,7 +91,7 @@ module tt_um_calonso88_rsa (
   // Amount of CFG Regs and Status Regs + Regs Width
   localparam int NUM_CFG = 8;
   localparam int NUM_STATUS = NUM_CFG;
-  localparam int REG_WIDTH = 8;
+  //localparam int REG_WIDTH = 8;
 
   // Config Regs and Status Regs
   wire [NUM_CFG*REG_WIDTH-1:0] config_regs;
@@ -100,7 +127,19 @@ module tt_um_calonso88_rsa (
   assign status_regs[55:48] = '0;
   assign status_regs[63:56] = '0;
 
+  assign spi_start_cmd = 1'b0;
+  assign spi_stop_cmd = 1'b0;
+
+  // GPIO wrapper
+  gpio_wrapper gpio_wrapper_i (.rstb(rst_n), .clk(clk), .ena(ena), .gpio_start(gpio_start), .gpio_stop(gpio_stop), .gpio_start_cmd(gpio_start_cmd), .gpio_stop_cmd(gpio_stop_cmd));
+
   // SPI wrapper
   spi_wrapper #(.NUM_CFG(NUM_CFG), .NUM_STATUS(NUM_STATUS), .REG_WIDTH(REG_WIDTH)) spi_wrapper_i (.rstb(rst_n), .clk(clk), .ena(ena), .mode({cpol_sync, cpha_sync}), .spi_cs_n(spi_cs_n_sync), .spi_clk(spi_clk_sync), .spi_mosi(spi_mosi_sync), .spi_miso(spi_miso), .config_regs(config_regs), .status_regs(status_regs));
+
+  // Controller
+  rsa_en_logic rsa_en_logic_i (.rstb(rst_n), .clk(clk), .ena(ena), .gpio_start(gpio_start_cmd), .spi_start(spi_start_cmd), .gpio_stop(gpio_stop_cmd), .spi_stop(spi_stop_cmd), .en_rsa(ena_rsa), .clear_rsa(clear_rsa), .eoc_rsa(eoc_rsa), .irq(irq));
+
+  // RSA Instance
+  rsa_unit #(.WIDTH(REG_WIDTH)) rsa_unit_i (.rstb(rst_n), .clk(clk), .ena(ena_rsa), .clear(clear_rsa),  .P(rsa_p), .E(rsa_e), .M(rsa_m), .Const(rsa_const), .eoc(eoc_rsa), .C(rsa_c));
 
 endmodule
