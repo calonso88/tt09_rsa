@@ -27,7 +27,10 @@ module mmm_unit #(parameter int WIDTH = 4) (rstb, clk, ena, clear, ld_a, ld_r, l
   logic [WIDTH-1:0] rjo;
   logic [WIDTH-1:0] R_i;
 
-  ripple_carry_adder #(.WIDTH(WIDTH)) adder1 (.a(B), .b(M), .ci(1'b0), .sum(MB), .co());
+  logic unused;
+  logic unused2;
+
+  ripple_carry_adder #(.WIDTH(WIDTH)) adder1 (.a(B), .b(M), .ci(1'b0), .sum(MB), .co(unused));
 
   generate
     for (genvar j=0; j<=(WIDTH-1); j++) begin : processing_elements_array_loop
@@ -39,7 +42,7 @@ module mmm_unit #(parameter int WIDTH = 4) (rstb, clk, ena, clear, ld_a, ld_r, l
     end
   endgenerate
 
-  ripple_carry_adder #(.WIDTH(WIDTH)) adder2 (.a(reg_rji), .b(mux_out), .ci(1'b0), .sum(rjo), .co());
+  ripple_carry_adder #(.WIDTH(WIDTH)) adder2 (.a(reg_rji), .b(mux_out), .ci(1'b0), .sum(rjo), .co(unused2));
 
   shiftreg1 #(.WIDTH(WIDTH)) shiftreg_A_aux   (.ena(ena), .rstb(rstb), .clk(clk), .clear(clear), .load(ld_a), .A(A), .A_bit(A_bit));
   shiftreg2 #(.WIDTH(WIDTH)) shiftreg_reg_rji (.ena(ena), .rstb(rstb), .clk(clk), .clear(clear), .load(ld_a), .rjo(rjo), .reg_rji(reg_rji));
