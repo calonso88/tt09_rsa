@@ -75,6 +75,8 @@ module tt_um_calonso88_rsa (
   // MISO Output port
   assign uio_out[3] = spi_miso;
 
+  // OUT
+  assign uo_out = 8'h00;
   // GPIO Output ports
   //assign blabla = spare;     // TBD
   //assign blabla = irq;       // TBD
