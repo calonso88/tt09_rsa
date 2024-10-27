@@ -38,6 +38,7 @@ project:
     - "shiftreg2.sv"
     - "shiftreg3.sv"
     - "spi_reg.sv"
+    - "rsa_spi_wrapper.sv"
     - "spi_wrapper.sv"
     - "synchronizer.sv"
     - "tt_um_calonso88_rsa.v"
