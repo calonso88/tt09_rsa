@@ -604,21 +604,21 @@ async def test_project(dut):
     # Write config_reg[7] = 0x0F
     await spi_write_cpha0 (dut.clk, dut.ui_in, 7, 0x0F)
     
-    # Read reg[0]
+    # Read config_reg[0]
     reg0 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 0, 0x00)
-    # Read reg[1]
+    # Read config_reg[1]
     reg1 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 1, 0x00)
-    # Read reg[2]
+    # Read config_reg[2]
     reg2 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 2, 0x00)
-    # Read reg[3]
+    # Read config_reg[3]
     reg3 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 3, 0x00)
-    # Read reg[4]
+    # Read config_reg[4]
     reg4 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 4, 0x00)
-    # Read reg[5]
+    # Read config_reg[5]
     reg5 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 5, 0x00)
-    # Read reg[6]
+    # Read config_reg[6]
     reg6 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 6, 0x00)
-    # Read reg[7]
+    # Read config_reg[7]
     reg7 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 7, 0x00)
 
     await ClockCycles(dut.clk, 10)
