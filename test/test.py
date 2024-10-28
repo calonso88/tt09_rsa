@@ -49,14 +49,15 @@ def is_prime(num):
     return 0;
   else :
     # Iterate from 2 to n // 2
-    for i in range(2, ((num // 2) + 1)) :
+    #for i in range(2, ((num // 2) + 1)) :
+    for i in range(2, num):
       # If num is divisible by any number between
       # 2 and n / 2, it is not prime
       if (num % i) == 0:
         #print(num, "is not a prime number")
         return 0
 
-      return 1
+    return 1
 
 
 def get_bit(value, bit_index):
