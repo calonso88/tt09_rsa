@@ -5,7 +5,7 @@
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES =  falling_edge_detector.sv full_adder.sv gpio_wrapper.sv half_adder.sv mmm_unit.sv mux1_unit.sv mux2_unit.sv mux3_unit.sv processing_element_mux_right_border.sv processing_element_mux.sv reclocking.sv register_crypt.sv ripple_carry_adder.sv rising_edge_detector.sv rsa_control.sv rsa_en_logic.sv rsa_unit.sv shiftreg1.sv shiftreg2.sv shiftreg3.sv spi_reg.sv rsa_spi_wrapper.sv spi_wrapper.sv synchronizer.sv tt_um_calonso88_rsa.v
+PROJECT_SOURCES = project.v
 
 ifneq ($(GATES),yes)
 
