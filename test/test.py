@@ -535,21 +535,33 @@ async def test_project(dut):
     #cocotb.log.info(f"Montgomery constant: {const}")
     #cocotb.log.info(f"Plain text: {plain_text}")
 
-    # Write reg[0] = 0x00
-    await spi_write (dut, 0, 0x00)
+    # Pull CS high
+    dut.ui_in.value = 1
+    await ClockCycles(dut.clk, 10)
 
-    # Write reg[2] ( plain_text )
-    await spi_write (dut, 2, plain_text)
-    # Write reg[3] ( e )
-    await spi_write (dut, 3, e)
-    # Write reg[4] ( M )
-    await spi_write (dut, 4, m)
-    # Write reg[5] ( const )
-    await spi_write (dut, 5, const)
+    # CPOL = 0, SPI_CLK low in idle
+    temp = dut.ui_in.value;
+    result = spi_clk_low(temp)
+    dut.ui_in.value = result
 
-    # Write reg[1] (Start)
-    await spi_write (dut, 1, 1)
+    # Wait for some time
+    await ClockCycles(dut.clk, 10)
+    await ClockCycles(dut.clk, 10)
 
+    # Write config_reg[0] = 0x00
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 0, 0)
+    # Write config_reg[2] ( plain_text )
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 2, plain_text)
+    # Write config_reg[3] ( e )
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 3, e)
+    # Write config_reg[4] ( M )
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 4, m)
+    # Write config_reg[5] ( const )
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 5, const)
+    # Write config_reg[1] ( start )
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 1, 1)
+    
+    
     encrypted_text = ( plain_text ** e ) % m
     cocotb.log.info(f"Encrypted text: {encrypted_text}")
 
@@ -561,11 +573,11 @@ async def test_project(dut):
 
     await ClockCycles(dut.clk, 500)
 
-    # Write reg[0] = 0x00
-    await spi_write (dut, 0, 0x00)
+    # Write config_reg[0] = 0x00
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 0, 0)
 
     # Read reg[6] ( encrypted_text_design )
-    encrypted_text_design = await spi_read (dut, 6, 0x00)
+    encrypted_text_design = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 6, 0x00)
     cocotb.log.info(f"Encrypted text design: {encrypted_text_design}")
 
     assert plain_text == decrypted_text
@@ -574,51 +586,51 @@ async def test_project(dut):
     assert encrypted_text == encrypted_text_design
     # DEBUG
 
-    # Write reg[0] = 0x00
-    await spi_write (dut, 0, 0x00)
-    # Write reg[1] = 0xDE
-    await spi_write (dut, 1, 0xDE)
-    # Write reg[2] = 0xAD
-    await spi_write (dut, 2, 0xAD)
-    # Write reg[3] = 0xBE
-    await spi_write (dut, 3, 0xBE)
-    # Write reg[4] = 0xEF
-    await spi_write (dut, 4, 0xEF)
-    # Write reg[5] = 0x55
-    await spi_write (dut, 5, 0x55)
-    # Write reg[6] = 0xAA
-    await spi_write (dut, 6, 0xAA)
-    # Write reg[7] = 0x0F
-    await spi_write (dut, 7, 0x0F)
-  
+
+    # Write config_reg[0] = 0x00
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 0, 0)
+    # Write config_reg[1] = 0xDE
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 1, 0xDE)
+    # Write config_reg[2] = 0xAD
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 2, 0xAD)
+    # Write config_reg[3] = 0xBE
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 3, 0xBE)
+    # Write config_reg[4] = 0xEF
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 4, 0xEF)
+    # Write config_reg[5] = 0x55
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 5, 0x55)
+    # Write config_reg[6] = 0xAA
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 6, 0xAA)
+    # Write config_reg[7] = 0x0F
+    await spi_write_cpha0 (dut.clk, dut.ui_in, 7, 0x0F)
+    
     # Read reg[0]
-    reg0 = await spi_read (dut, 0, 0x00)
+    reg0 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 0, 0x00)
     # Read reg[1]
-    reg1 = await spi_read (dut, 1, 0x00)
+    reg1 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 1, 0x00)
     # Read reg[2]
-    reg2 = await spi_read (dut, 2, 0x00)
+    reg2 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 2, 0x00)
     # Read reg[3]
-    reg3 = await spi_read (dut, 3, 0x00)
+    reg3 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 3, 0x00)
     # Read reg[4]
-    reg4 = await spi_read (dut, 4, 0x00)
+    reg4 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 4, 0x00)
     # Read reg[5]
-    reg5 = await spi_read (dut, 5, 0x00)
+    reg5 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 5, 0x00)
     # Read reg[6]
-    reg6 = await spi_read (dut, 6, 0x00)
+    reg6 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 6, 0x00)
     # Read reg[7]
-    reg7 = await spi_read (dut, 7, 0x00)
+    reg7 = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 7, 0x00)
 
     await ClockCycles(dut.clk, 10)
 
-    #assert reg0 == 0xF0
+    assert reg0 == 0x00
     assert reg1 == 0xDE
     assert reg2 == 0xAD
     assert reg3 == 0xBE
     assert reg4 == 0xEF
     assert reg5 == 0x55
-    #assert reg6 == 0xAA
+    assert reg6 == 0xAA
     assert reg7 == 0x0F
-
 
     iterations = iterations + 1
 
