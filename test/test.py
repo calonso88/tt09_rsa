@@ -576,8 +576,8 @@ async def test_project(dut):
     # Write config_reg[0] = 0x00
     await spi_write_cpha0 (dut.clk, dut.ui_in, 0, 0)
 
-    # Read reg[6] ( encrypted_text_design )
-    encrypted_text_design = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, 6, 0x00)
+    # Read status_reg[6] ( encrypted_text_design )
+    encrypted_text_design = await spi_read_cpha0 (dut.clk, dut.ui_in, dut.uo_out, (8+6), 0x00)
     cocotb.log.info(f"Encrypted text design: {encrypted_text_design}")
 
     assert plain_text == decrypted_text
