@@ -45,7 +45,7 @@ def mem (p, e, m, nbits):
   return r
 
 def is_prime(num):
-  if (num < 2) :
+  if (num <= 2) :
     return 0;
   else :
     # Iterate from 2 to n // 2
