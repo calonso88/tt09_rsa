@@ -466,7 +466,7 @@ async def test_project(dut):
   
   while iterations < 100:
 
-    cocotb.log.info(f"Start of iteration: {iteration}")
+    cocotb.log.info(f"Start of iteration: {iterations}")
     
     while True:
       p = random.randint(min_prime, max_upper_boundary)
@@ -634,7 +634,7 @@ async def test_project(dut):
     assert reg6 == 0xAA
     assert reg7 == 0x0F
 
-    cocotb.log.info(f"End of iteration: {iteration}")
+    cocotb.log.info(f"End of iteration: {iterations}")
     
     iterations = iterations + 1
 
