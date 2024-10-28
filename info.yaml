@@ -46,29 +46,29 @@ project:
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 pinout:
   # Inputs
-  ui[0]: "A"
-  ui[1]: "B"
-  ui[2]: "C"
-  ui[3]: ""
-  ui[4]: ""
+  ui[0]: "spi_cs_n"
+  ui[1]: "spi_clk"
+  ui[2]: "spi_mosi"
+  ui[3]: "cpol"
+  ui[4]: "cpha"
   ui[5]: ""
   ui[6]: ""
   ui[7]: ""
 
   # Outputs
-  uo[0]: "D"
-  uo[1]: "E"
-  uo[2]: "F"
-  uo[3]: ""
+  uo[0]: ""
+  uo[1]: ""
+  uo[2]: ""
+  uo[3]: "spi_miso"
   uo[4]: ""
   uo[5]: ""
   uo[6]: ""
   uo[7]: ""
 
   # Bidirectional pins
-  uio[0]: "G"
-  uio[1]: "H"
-  uio[2]: "I"
+  uio[0]: ""
+  uio[1]: ""
+  uio[2]: ""
   uio[3]: ""
   uio[4]: ""
   uio[5]: ""
