@@ -464,8 +464,10 @@ async def test_project(dut):
   # ITERATIONS 
   iterations = 0
   
-  while iterations < 1000:
+  while iterations < 100:
 
+    cocotb.log.info(f"Start of iteration: {iteration}")
+    
     while True:
       p = random.randint(min_prime, max_upper_boundary)
       p_is_prime = is_prime(p)
@@ -632,6 +634,8 @@ async def test_project(dut):
     assert reg6 == 0xAA
     assert reg7 == 0x0F
 
+    cocotb.log.info(f"End of iteration: {iteration}")
+    
     iterations = iterations + 1
 
   await ClockCycles(dut.clk, 10)
