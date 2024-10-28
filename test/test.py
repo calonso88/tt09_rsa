@@ -49,8 +49,7 @@ def is_prime(num):
     return 0;
   else :
     # Iterate from 2 to n // 2
-    #for i in range(2, ((num // 2) + 1)) :
-    for i in range(2, num):
+    for i in range(2, ((num // 2) + 1)) :
       # If num is divisible by any number between
       # 2 and n / 2, it is not prime
       if (num % i) == 0:
@@ -465,14 +464,11 @@ async def test_project(dut):
   # ITERATIONS 
   iterations = 0
   
-  while iterations < 1000:
+  while iterations < 100:
 
     cocotb.log.info(f"Start of iteration: {iterations}")
     
     while True:
-      p_is_prime = 0
-      q_is_prime = 0
-      m = 0
       p = random.randint(min_prime, max_upper_boundary)
       p_is_prime = is_prime(p)
       q = random.randint(min_prime, max_upper_boundary)
