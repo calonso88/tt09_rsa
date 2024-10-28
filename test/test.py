@@ -469,6 +469,9 @@ async def test_project(dut):
     cocotb.log.info(f"Start of iteration: {iterations}")
     
     while True:
+      p_is_prime = 0
+      q_is_prime = 0
+      m = 0
       p = random.randint(min_prime, max_upper_boundary)
       p_is_prime = is_prime(p)
       q = random.randint(min_prime, max_upper_boundary)
