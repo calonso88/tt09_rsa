@@ -11,7 +11,7 @@
 
   "//": "Here are some of the variables you may want to change:",
 
-  "PLACE_DENSITY": 0.83,
+  "PLACE_DENSITY": 0.87,
   "TNS_END_PERCENT": 100,
 
   "//": "Increase this if you are getting 'Synthesized memory size exceeds maximum allowed bits' error:",
