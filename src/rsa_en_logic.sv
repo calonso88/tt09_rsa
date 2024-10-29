@@ -41,6 +41,7 @@
   logic en_rsa_i;
   logic clear_rsa_i;
   logic irq_i;
+  logic irq_reg;
 
   // Combine both GPIO and SPI
   assign start_comb = gpio_start | spi_start;
@@ -49,7 +50,24 @@
   // Outputs
   assign en_rsa = en_rsa_i;
   assign clear_rsa = clear_rsa_i;
-  assign irq = irq_i;
+  assign irq = irq_reg;
+
+  // Register irq
+  always_ff @(negedge(rstb) or posedge(clk)) begin
+    if (!rstb) begin
+      irq_reg <= 1'b0;
+    end else begin
+      if (ena == 1'b1) begin
+        if ((start_comb == 1'b1) || (stop_comb == 1'b1)) begin
+          irq_reg <= 1'b0;
+        end else begin
+          if (state == STATE_IRQ) begin
+            irq_reg <= irq_i;
+          end
+        end
+      end
+    end
+  end
 
   // Next state transition
   always_ff @(negedge(rstb) or posedge(clk)) begin
