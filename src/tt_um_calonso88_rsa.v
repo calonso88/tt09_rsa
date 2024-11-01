@@ -57,29 +57,35 @@ module tt_um_calonso88_rsa (
   wire [REG_WIDTH-1:0] rsa_c;
   wire [REG_WIDTH-1:0] spare;
 
+  // Bi direction IOs [6:4] as inputs
+  assign uio_oe[6:4] = 3'b000;
+  // Bi direction IOs [7] and [3:0] as outputs
+  assign uio_oe[7]   = 1'b1;
+  assign uio_oe[3:0] = 4'b1111;
+
   // Input ports
-  //assign cpol      = ui_in[0];
-  //assign cpha      = ui_in[1];
-  assign cpol      = 1'b0;
-  assign cpha      = 1'b0;
-  assign spi_cs_n  = ui_in[0];
-  assign spi_clk   = ui_in[1];
-  assign spi_mosi  = ui_in[2];
-  assign gpio_start = ui_in[3];
-  assign gpio_stop  = ui_in[4];
+  assign gpio_start = ui_in[0];
+  assign gpio_stop  = ui_in[1];
+  assign cpol       = ui_in[2];
+  assign cpha       = ui_in[3];
+  // Unused           ui_in[4]
+  // Looopback        ui_in[5] to uio_out[7]
+  // Looopback        ui_in[7:6] to uio_out[2:1]
+  
+  // Bi-directional Input ports
+  assign spi_cs_n  = uio_in[4];
+  assign spi_clk   = uio_in[5];
+  assign spi_mosi  = uio_in[6];
   
   // Output ports
-  assign uo_out[2:0]  = '0;
-  assign uo_out[3] = spi_miso;
-  assign uo_out[4] = irq;
-  assign uo_out[7:5]  = '0;
-  
-  // Bi-directional ports 
-  // Assign bi-directional as output
-  assign uio_oe       = '1;
-  // Assign spare to bi-directional output
-  assign uio_out[7:0] = spare;
-  
+  assign uo_out[7:0] = spare;
+
+  // Bi-directional Output ports
+  assign uio_out[0] = irq;
+  assign uio_out[2:1] = ui_in[7:6];
+  assign uio_out[3] = spi_miso;
+  assign uio_out[7] = ui_in[5];
+     
   // Number of stages in each synchronizer
   localparam int SYNC_STAGES = 2;
   localparam int SYNC_WIDTH = 1;
