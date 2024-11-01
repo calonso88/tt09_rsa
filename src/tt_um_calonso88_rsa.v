@@ -68,8 +68,8 @@ module tt_um_calonso88_rsa (
   assign gpio_stop  = ui_in[1];
   assign cpol       = ui_in[2];
   assign cpha       = ui_in[3];
-  // Looopback        ui_in[5:4] to uio_out[2:2]
-  // Looopback        ui_in[7] to uio_out[7]
+  // Pass through     ui_in[5:4] to uio_out[2:1]
+  // Pass through     ui_in[7] to uio_out[7]
   
   // Bi-directional Input ports
   assign spi_cs_n  = uio_in[4];
