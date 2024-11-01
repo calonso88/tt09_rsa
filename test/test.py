@@ -76,31 +76,31 @@ def xor_bit(value, bit_index):
   return temp
 
 def pull_cs_high(value):
-  temp = set_bit(value, 0)
+  temp = set_bit(value, 4)
   return temp
 
 def pull_cs_low(value):
-  temp = clear_bit(value, 0)
+  temp = clear_bit(value, 4)
   return temp
 
 def spi_clk_high(value):
-  temp = set_bit(value, 1)
+  temp = set_bit(value, 5)
   return temp
 
 def spi_clk_low(value):
-  temp = clear_bit(value, 1)
+  temp = clear_bit(value, 5)
   return temp
 
 def spi_clk_invert(value):
-  temp = xor_bit(value, 1)
+  temp = xor_bit(value, 5)
   return temp
 
 def spi_mosi_high(value):
-  temp = set_bit(value, 2)
+  temp = set_bit(value, 6)
   return temp
 
 def spi_mosi_low(value):
-  temp = clear_bit(value, 2)
+  temp = clear_bit(value, 6)
   return temp
 
 def spi_miso_read(port):
