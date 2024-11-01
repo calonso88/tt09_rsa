@@ -68,9 +68,8 @@ module tt_um_calonso88_rsa (
   assign gpio_stop  = ui_in[1];
   assign cpol       = ui_in[2];
   assign cpha       = ui_in[3];
-  // Unused           ui_in[4]
-  // Looopback        ui_in[5] to uio_out[7]
-  // Looopback        ui_in[7:6] to uio_out[2:1]
+  // Looopback        ui_in[5:4] to uio_out[2:2]
+  // Looopback        ui_in[7] to uio_out[7]
   
   // Bi-directional Input ports
   assign spi_cs_n  = uio_in[4];
@@ -82,9 +81,9 @@ module tt_um_calonso88_rsa (
 
   // Bi-directional Output ports
   assign uio_out[0] = irq;
-  assign uio_out[2:1] = ui_in[7:6];
+  assign uio_out[2:1] = ui_in[5:4];
   assign uio_out[3] = spi_miso;
-  assign uio_out[7] = ui_in[5];
+  assign uio_out[7:4] = ui_in[7:4];
      
   // Number of stages in each synchronizer
   localparam int SYNC_STAGES = 2;
